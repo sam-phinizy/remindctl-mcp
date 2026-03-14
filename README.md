@@ -22,7 +22,17 @@ MCP server for Apple Reminders via [remindctl](https://github.com/steipete/remin
 
 ## Installation
 
-### Claude Code
+### Interactive installer (recommended)
+
+Run the installer and follow the prompts to configure any combination of Claude Code, Claude Desktop, and ChatGPT:
+
+```bash
+uvx remindctl-mcp install
+```
+
+### Manual configuration
+
+#### Claude Code
 
 Add to `.mcp.json` in project root or `~/.claude.json` (user-level):
 
@@ -37,7 +47,7 @@ Add to `.mcp.json` in project root or `~/.claude.json` (user-level):
 }
 ```
 
-### Claude Desktop (including Cowork)
+#### Claude Desktop (including Cowork)
 
 Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
@@ -52,7 +62,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 }
 ```
 
-### ChatGPT Desktop
+#### ChatGPT Desktop
 
 ChatGPT Desktop supports MCP servers. Add to ChatGPT's MCP config (Settings → Advanced → MCP Servers):
 
