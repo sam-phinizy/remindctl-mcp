@@ -26,6 +26,7 @@ tasks:
     cmds:
       - uv run pytest -q
       - uv version --bump {{.BUMP}}
+      - rm -rf dist/
       - uv build
       - uv publish --token $PYPI_TOKEN
       - |
