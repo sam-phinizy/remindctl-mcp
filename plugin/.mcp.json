@@ -1,0 +1,6 @@
+{
+  "remindctl": {
+    "command": "uvx",
+    "args": ["--refresh", "remindctl-mcp"]
+  }
+}

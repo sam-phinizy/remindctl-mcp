@@ -1,6 +1,6 @@
 ---
 name: text-to-reminders
-description: This skill should be used when the user asks to "parse this email into reminders", "extract action items from this", "turn this into reminders", "convert this email to tasks", "add reminders from this thread", "parse this document for action items", or pastes a large block of text (email, Slack thread, meeting notes, document) and asks for reminders to be created from it. Handles extraction, consolidation, smart due dates, and structured note-taking.
+description: This skill should be used when the user asks to "parse this email into reminders", "extract action items from this", "turn this into reminders", "create reminders from this", "convert this email to tasks", "add reminders from this thread", "parse this document for action items", or pastes a large block of text (email, Slack thread, meeting notes, document) and asks for reminders to be created from it. Handles extraction, consolidation, smart due dates, and structured note-taking.
 version: 0.1.0
 ---
 
@@ -46,33 +46,18 @@ Aim for the fewest reminders that cover all action items without losing informat
 
 ### Step 4: Propose the Reminder List
 
-Present a structured proposal before creating anything:
+Present a structured proposal before creating anything. Use this format for each item:
 
 ```
-Here's what I found — 4 reminders (consolidated from 7 action items):
-
-1. **Reply to Sarah re: contract terms**
-   List: Work
-   Due: March 20
-   Notes: She needs the redlined version before her board meeting. Key points to address: liability cap (§4.2), IP ownership (§7), payment terms (net-30 → net-15).
-
-2. **Schedule design review with Jake**
-   List: Work
-   Due: this week
-   Notes: Mentioned in thread from March 14. Needs to happen before the sprint kickoff. Suggested times: Tue/Thu afternoon.
-
-3. **Send Q1 report to finance**
-   List: Work
-   Due: March 31
-   Notes: End-of-quarter deadline. Finance contact: billing@acme.com. Include headcount delta and budget variance.
-
-4. **Follow up with vendor on pricing**
-   List: Work
-   Due: (none found)
-   Notes: They said they'd have updated pricing "by end of month". If no response by March 25, escalate to procurement.
-
-Shall I create these? Or adjust any before I do?
+1. **Short action-oriented title**
+   List: [list name]
+   Due: [date or (none)]
+   Notes: [context — who, why, what exactly]
 ```
+
+End the proposal with a count summary and confirmation prompt: "Found N reminders (consolidated from M action items). Shall I create these?"
+
+See `references/examples.md` for full worked examples of proposal formatting across different source types (emails, Slack threads, meeting notes).
 
 ### Step 5: Handle User Adjustments
 
@@ -89,7 +74,7 @@ Re-present only the changed items for confirmation, not the full list.
 Once confirmed, call `add_reminder` for each item in sequence:
 - Pass `title`, `reminder_list`, `due` (if present), and `notes`
 - Use `priority: high` only for items with hard deadlines under 48 hours or explicitly marked urgent
-- After all are created, summarise: "Created 4 reminders in Work."
+- After all are created, summarize: "Created 4 reminders in Work."
 
 ## Due Date Extraction
 
@@ -107,7 +92,7 @@ When the date is ambiguous or relative, state your interpretation in the proposa
 
 ## Notes Field Best Practices
 
-Good notes give future-you enough context to act without re-reading the source:
+Notes should provide enough context to act on the reminder without re-reading the source:
 
 - **Who**: who sent the request, who it affects
 - **Why**: the purpose or stakes

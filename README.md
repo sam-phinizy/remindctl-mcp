@@ -14,8 +14,8 @@ MCP server for Apple Reminders via [remindctl](https://github.com/steipete/remin
 - `get_reminders(filter)` — query by today/tomorrow/week/overdue/upcoming/completed/all/YYYY-MM-DD
 - `get_lists()` — list all reminder lists
 - `get_list(name)` — reminders in a specific list
-- `add_reminder(title, list?, due?)` — create a reminder
-- `edit_reminder(id, title?, due?)` — update a reminder
+- `add_reminder(title, list?, due?, notes?, priority?)` — create a reminder
+- `edit_reminder(id, title?, due?, notes?, priority?, list?, clear_due?)` — update a reminder
 - `complete_reminder(ids)` — mark complete
 - `delete_reminder(id)` — delete a reminder
 - `check_status()` — verify permission status
@@ -81,6 +81,16 @@ ChatGPT Desktop supports MCP servers. Add to ChatGPT's MCP config (Settings → 
 uvx --no-cache remindctl-mcp
 ```
 
+## Claude Code Plugin
+
+For Claude Code users, there's also a plugin with the **text-to-reminders** skill — it parses emails, Slack threads, and meeting notes into structured reminders automatically.
+
+```bash
+claude --plugin-dir /path/to/remindctl-mcp/plugin
+```
+
+See [`plugin/README.md`](plugin/README.md) for details.
+
 ## Development
 
 ```bash
@@ -89,3 +99,7 @@ cd remindctl-mcp
 uv sync
 uv run pytest
 ```
+
+## License
+
+MIT
