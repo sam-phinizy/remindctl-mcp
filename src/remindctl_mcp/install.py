@@ -1,10 +1,18 @@
 """Interactive installer for remindctl-mcp MCP configuration."""
 
 import json
+import shutil
 import sys
 from pathlib import Path
 
-MCP_ENTRY = {"command": "uvx", "args": ["remindctl-mcp"]}
+
+def _uvx_path() -> str:
+    """Return the full path to uvx, falling back to 'uvx' if not resolvable."""
+    return shutil.which("uvx") or "uvx"
+
+
+def _mcp_entry() -> dict:
+    return {"command": _uvx_path(), "args": ["remindctl-mcp"]}
 
 TARGETS = {
     "1": (
@@ -48,7 +56,7 @@ def _install_to(label: str, path: Path) -> None:
         print(f"  ✓ remindctl already configured in {label}")
         return
 
-    servers["remindctl"] = MCP_ENTRY
+    servers["remindctl"] = _mcp_entry()
     _write_config(path, config)
     print(f"  ✓ Added remindctl to {label} ({path})")
 
@@ -56,6 +64,14 @@ def _install_to(label: str, path: Path) -> None:
 def run_installer() -> None:
     print("remindctl-mcp installer")
     print("-" * 40)
+
+    uvx = _uvx_path()
+    if shutil.which("uvx"):
+        print(f"Found uvx at: {uvx}\n")
+    else:
+        print("⚠️  uvx not found on PATH — config will use 'uvx' as the command.")
+        print("   Install uv from https://docs.astral.sh/uv/ first.\n")
+
     print("Where would you like to install?\n")
 
     for key, (label, path) in TARGETS.items():
