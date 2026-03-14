@@ -1,5 +1,9 @@
+from typing import Literal
+
 from fastmcp import FastMCP
 from remindctl_mcp.runner import run_remindctl, RemindctlError
+
+ReminderFilter = Literal["today", "tomorrow", "week", "overdue", "upcoming", "completed", "all"]
 
 INSTRUCTIONS = """You are managing Apple Reminders via remindctl.
 
@@ -19,7 +23,7 @@ mcp = FastMCP("remindctl", instructions=INSTRUCTIONS)
 
 
 @mcp.tool()
-def get_reminders(filter: str) -> dict | list:
+def get_reminders(filter: ReminderFilter | str) -> dict | list:
     """Get reminders by filter.
 
     Args:
@@ -45,17 +49,17 @@ def get_list(name: str) -> dict | list:
 
 
 @mcp.tool()
-def add_reminder(title: str, list: str | None = None, due: str | None = None) -> dict | list:
+def add_reminder(title: str, reminder_list: str | None = None, due: str | None = None) -> dict | list:
     """Add a new reminder.
 
     Args:
         title: The title of the reminder.
-        list: Optional list name to add the reminder to (defaults to "Reminders").
+        reminder_list: Optional list name to add the reminder to (defaults to "Reminders").
         due: Optional due date in YYYY-MM-DD or ISO 8601 format.
     """
     args = ["add", "--title", title]
-    if list is not None:
-        args += ["--list", list]
+    if reminder_list is not None:
+        args += ["--list", reminder_list]
     if due is not None:
         args += ["--due", due]
     return run_remindctl(args)

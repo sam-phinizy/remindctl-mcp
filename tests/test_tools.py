@@ -50,7 +50,7 @@ def test_add_reminder_minimal():
 
 def test_add_reminder_full():
     with make_patch() as mock_run:
-        result = add_reminder("Buy milk", list="Groceries", due="2026-03-15")
+        result = add_reminder("Buy milk", reminder_list="Groceries", due="2026-03-15")
     args = mock_run.call_args[0][0]
     assert args == ["add", "--title", "Buy milk", "--list", "Groceries", "--due", "2026-03-15"]
     assert result == MOCK_RETURN
@@ -94,4 +94,20 @@ def test_check_status():
     with make_patch() as mock_run:
         result = check_status()
     mock_run.assert_called_once_with(["status"])
+    assert result == MOCK_RETURN
+
+
+def test_edit_reminder_both_fields():
+    with make_patch() as mock_run:
+        result = edit_reminder("42", title="New title", due="2026-05-01")
+    args = mock_run.call_args[0][0]
+    assert "--title" in args
+    assert "--due" in args
+    assert result == MOCK_RETURN
+
+
+def test_complete_reminder_empty_list():
+    with make_patch() as mock_run:
+        result = complete_reminder([])
+    mock_run.assert_called_once_with(["complete"])
     assert result == MOCK_RETURN
