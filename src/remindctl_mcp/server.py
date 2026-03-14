@@ -48,39 +48,74 @@ def get_list(name: str) -> dict | list:
     return run_remindctl(["list", name])
 
 
+Priority = Literal["none", "low", "medium", "high"]
+
+
 @mcp.tool()
-def add_reminder(title: str, reminder_list: str | None = None, due: str | None = None) -> dict | list:
+def add_reminder(
+    title: str,
+    reminder_list: str | None = None,
+    due: str | None = None,
+    notes: str | None = None,
+    priority: Priority | None = None,
+) -> dict | list:
     """Add a new reminder.
 
     Args:
         title: The title of the reminder.
         reminder_list: Optional list name to add the reminder to (defaults to "Reminders").
-        due: Optional due date in YYYY-MM-DD or ISO 8601 format.
+        due: Optional due date (today/tomorrow/YYYY-MM-DD/ISO 8601).
+        notes: Optional notes body for the reminder.
+        priority: Optional priority: none, low, medium, or high.
     """
     args = ["add", "--title", title]
     if reminder_list is not None:
         args += ["--list", reminder_list]
     if due is not None:
         args += ["--due", due]
+    if notes is not None:
+        args += ["--notes", notes]
+    if priority is not None:
+        args += ["--priority", priority]
     return run_remindctl(args)
 
 
 @mcp.tool()
-def edit_reminder(id: str, title: str | None = None, due: str | None = None) -> dict | list:
+def edit_reminder(
+    id: str,
+    title: str | None = None,
+    due: str | None = None,
+    notes: str | None = None,
+    priority: Priority | None = None,
+    reminder_list: str | None = None,
+    clear_due: bool = False,
+) -> dict | list:
     """Edit an existing reminder.
 
     Args:
         id: The ID of the reminder to edit.
         title: New title for the reminder.
-        due: New due date in YYYY-MM-DD or ISO 8601 format.
+        due: New due date (today/tomorrow/YYYY-MM-DD/ISO 8601).
+        notes: New notes body.
+        priority: New priority: none, low, medium, or high.
+        reminder_list: Move reminder to this list.
+        clear_due: Remove the due date entirely.
     """
-    if title is None and due is None:
-        raise ValueError("At least one of title or due must be provided")
+    if not any([title, due, notes, priority, reminder_list, clear_due]):
+        raise ValueError("At least one field must be provided to edit")
     args = ["edit", id]
     if title is not None:
         args += ["--title", title]
     if due is not None:
         args += ["--due", due]
+    if notes is not None:
+        args += ["--notes", notes]
+    if priority is not None:
+        args += ["--priority", priority]
+    if reminder_list is not None:
+        args += ["--list", reminder_list]
+    if clear_due:
+        args += ["--clear-due"]
     return run_remindctl(args)
 
 

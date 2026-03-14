@@ -72,7 +72,7 @@ def test_edit_reminder_due():
 
 def test_edit_reminder_no_fields():
     with make_patch():
-        with pytest.raises(ValueError, match="At least one of title or due must be provided"):
+        with pytest.raises(ValueError, match="At least one field must be provided to edit"):
             edit_reminder("42")
 
 
