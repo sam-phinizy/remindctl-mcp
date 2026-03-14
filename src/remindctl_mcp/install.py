@@ -14,6 +14,7 @@ def _uvx_path() -> str:
 def _mcp_entry() -> dict:
     return {"command": _uvx_path(), "args": ["remindctl-mcp"]}
 
+
 TARGETS = {
     "1": (
         "Claude Desktop",
@@ -45,23 +46,24 @@ def _write_config(path: Path, config: dict) -> None:
     path.write_text(json.dumps(config, indent=2) + "\n")
 
 
-def _install_to(label: str, path: Path) -> None:
+def _install_to(label: str, path: Path, force: bool = False) -> None:
     config = _load_json(path)
     if not config:
         config = {}
 
     servers = config.setdefault("mcpServers", {})
 
-    if "remindctl" in servers:
-        print(f"  ✓ remindctl already configured in {label}")
+    if "remindctl" in servers and not force:
+        print(f"  ✓ remindctl already configured in {label} (use --force to overwrite)")
         return
 
     servers["remindctl"] = _mcp_entry()
     _write_config(path, config)
-    print(f"  ✓ Added remindctl to {label} ({path})")
+    action = "Updated" if "remindctl" in servers else "Added"
+    print(f"  ✓ {action} remindctl in {label} ({path})")
 
 
-def run_installer() -> None:
+def run_installer(force: bool = False) -> None:
     print("remindctl-mcp installer")
     print("-" * 40)
 
@@ -71,6 +73,9 @@ def run_installer() -> None:
     else:
         print("⚠️  uvx not found on PATH — config will use 'uvx' as the command.")
         print("   Install uv from https://docs.astral.sh/uv/ first.\n")
+
+    if force:
+        print("⚡ Force mode — existing entries will be overwritten.\n")
 
     print("Where would you like to install?\n")
 
@@ -96,6 +101,6 @@ def run_installer() -> None:
     print()
     for key in choices:
         label, path = TARGETS[key]
-        _install_to(label, path)
+        _install_to(label, path, force=force)
 
     print("\nDone! Restart any open Claude clients to load the MCP server.")

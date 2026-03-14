@@ -115,6 +115,6 @@ def main() -> None:
 
     if len(sys.argv) > 1 and sys.argv[1] == "install":
         from remindctl_mcp.install import run_installer
-        run_installer()
+        run_installer(force="--force" in sys.argv)
     else:
         mcp.run()
