@@ -2,6 +2,7 @@
 
 import json
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -31,6 +32,39 @@ TARGETS = {
 }
 
 
+def _ensure_remindctl() -> bool:
+    """Check for remindctl and offer to install it if missing. Returns True if ready."""
+    if shutil.which("remindctl"):
+        print("Found remindctl ✓\n")
+        return True
+
+    print("remindctl is not installed.\n")
+
+    brew = shutil.which("brew")
+    if not brew:
+        print("Homebrew is not installed either.")
+        print("Install Homebrew first: https://brew.sh")
+        print("Then run: brew install steipete/tap/remindctl\n")
+        answer = input("Continue anyway? (y/N): ").strip().lower()
+        return answer == "y"
+
+    answer = input("Install remindctl via Homebrew? (Y/n): ").strip().lower()
+    if answer in ("", "y"):
+        print()
+        result = subprocess.run([brew, "install", "steipete/tap/remindctl"])
+        if result.returncode != 0:
+            print("\n⚠️  Homebrew install failed. You can install manually:")
+            print("   brew install steipete/tap/remindctl\n")
+            answer = input("Continue anyway? (y/N): ").strip().lower()
+            return answer == "y"
+        print("\nremindctl installed ✓")
+        print("Run `remindctl authorize` in your terminal to grant Reminders access.\n")
+        return True
+    else:
+        print("Skipping remindctl install.\n")
+        return True
+
+
 def _load_json(path: Path) -> dict:
     if path.exists():
         try:
@@ -57,9 +91,10 @@ def _install_to(label: str, path: Path, force: bool = False) -> None:
         print(f"  ✓ remindctl already configured in {label} (use --force to overwrite)")
         return
 
+    already_existed = "remindctl" in servers
     servers["remindctl"] = _mcp_entry()
     _write_config(path, config)
-    action = "Updated" if "remindctl" in servers else "Added"
+    action = "Updated" if already_existed else "Added"
     print(f"  ✓ {action} remindctl in {label} ({path})")
 
 
@@ -69,10 +104,15 @@ def run_installer(force: bool = False) -> None:
 
     uvx = _uvx_path()
     if shutil.which("uvx"):
-        print(f"Found uvx at: {uvx}\n")
+        print(f"Found uvx at: {uvx}")
     else:
         print("⚠️  uvx not found on PATH — config will use 'uvx' as the command.")
-        print("   Install uv from https://docs.astral.sh/uv/ first.\n")
+        print("   Install uv from https://docs.astral.sh/uv/ first.")
+    print()
+
+    if not _ensure_remindctl():
+        print("Aborted.")
+        sys.exit(1)
 
     if force:
         print("⚡ Force mode — existing entries will be overwritten.\n")
@@ -104,3 +144,5 @@ def run_installer(force: bool = False) -> None:
         _install_to(label, path, force=force)
 
     print("\nDone! Restart any open Claude clients to load the MCP server.")
+    if not shutil.which("remindctl"):
+        print("Remember to install remindctl and run `remindctl authorize` in your terminal.")
