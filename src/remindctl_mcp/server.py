@@ -110,5 +110,11 @@ def check_status() -> dict | list:
     return run_remindctl(["status"])
 
 
-def main():
-    mcp.run()
+def main() -> None:
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == "install":
+        from remindctl_mcp.install import run_installer
+        run_installer()
+    else:
+        mcp.run()
