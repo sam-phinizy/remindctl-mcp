@@ -28,11 +28,13 @@ tasks:
       - uv version --bump {{.BUMP}}
       - uv build
       - uv publish --token $PYPI_TOKEN
-      - git add pyproject.toml uv.lock
-      - git commit -m "chore: release v$(uv version --short)"
-      - git tag "v$(uv version --short)"
-      - git push && git push --tags
-      - gh release create "v$(uv version --short)" dist/* --generate-notes --title "v$(uv version --short)"
+      - |
+        VERSION=$(uv version --short)
+        git add pyproject.toml uv.lock
+        git commit -m "chore: release v${VERSION}"
+        git tag "v${VERSION}"
+        git push && git push --tags
+        gh release create "v${VERSION}" dist/* --generate-notes --title "v${VERSION}"
 
   publish-testpypi:
     desc: Publish to TestPyPI (requires TEST_PYPI_TOKEN env var)
