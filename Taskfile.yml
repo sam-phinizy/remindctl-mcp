@@ -20,9 +20,19 @@ tasks:
     cmd: uv build
 
   publish:
-    desc: Publish to PyPI (requires PYPI_TOKEN env var)
-    deps: [build]
-    cmd: uv publish --token $PYPI_TOKEN
+    desc: "Bump version, publish to PyPI, commit, tag, and cut a GitHub release. Usage: task publish BUMP=patch|minor|major"
+    vars:
+      BUMP: '{{.BUMP | default "patch"}}'
+    cmds:
+      - uv run pytest -q
+      - uv version --bump {{.BUMP}}
+      - uv build
+      - uv publish --token $PYPI_TOKEN
+      - git add pyproject.toml uv.lock
+      - git commit -m "chore: release v$(uv version --short)"
+      - git tag "v$(uv version --short)"
+      - git push && git push --tags
+      - gh release create "v$(uv version --short)" dist/* --generate-notes --title "v$(uv version --short)"
 
   publish-testpypi:
     desc: Publish to TestPyPI (requires TEST_PYPI_TOKEN env var)
