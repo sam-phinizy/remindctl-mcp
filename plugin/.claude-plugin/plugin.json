@@ -1,0 +1,8 @@
+{
+  "name": "remindctl",
+  "version": "0.1.0",
+  "description": "Apple Reminders integration for Claude Code via remindctl-mcp. Includes skills for converting emails, documents, and threads into structured reminders.",
+  "author": {
+    "name": "sam-phinizy"
+  }
+}
