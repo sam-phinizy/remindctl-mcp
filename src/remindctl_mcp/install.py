@@ -13,7 +13,7 @@ def _uvx_path() -> str:
 
 
 def _mcp_entry() -> dict:
-    return {"command": _uvx_path(), "args": ["remindctl-mcp"]}
+    return {"command": _uvx_path(), "args": ["--refresh", "remindctl-mcp"]}
 
 
 TARGETS = {

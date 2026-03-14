@@ -41,7 +41,7 @@ Add to `.mcp.json` in project root or `~/.claude.json` (user-level):
   "mcpServers": {
     "remindctl": {
       "command": "uvx",
-      "args": ["remindctl-mcp"]
+      "args": ["--refresh", "remindctl-mcp"]
     }
   }
 }
@@ -56,7 +56,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "remindctl": {
       "command": "uvx",
-      "args": ["remindctl-mcp"]
+      "args": ["--refresh", "remindctl-mcp"]
     }
   }
 }
@@ -70,7 +70,7 @@ ChatGPT Desktop supports MCP servers. Add to ChatGPT's MCP config (Settings → 
 {
   "remindctl": {
     "command": "uvx",
-    "args": ["remindctl-mcp"]
+    "args": ["--refresh", "remindctl-mcp"]
   }
 }
 ```
