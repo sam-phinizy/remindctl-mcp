@@ -1,0 +1,34 @@
+version: '3'
+
+dotenv: ['.env']
+
+tasks:
+  test:
+    desc: Run tests
+    cmd: uv run pytest
+
+  typecheck:
+    desc: Run ty type checker
+    cmd: uv run ty check src/
+
+  check:
+    desc: Run tests and type checker
+    deps: [test, typecheck]
+
+  build:
+    desc: Build distribution packages
+    cmd: uv build
+
+  publish:
+    desc: Publish to PyPI (requires PYPI_TOKEN env var)
+    deps: [build]
+    cmd: uv publish --token $PYPI_TOKEN
+
+  publish-testpypi:
+    desc: Publish to TestPyPI (requires TEST_PYPI_TOKEN env var)
+    deps: [build]
+    cmd: uv publish --publish-url https://test.pypi.org/legacy/ --token $TEST_PYPI_TOKEN
+
+  clean:
+    desc: Remove build artifacts
+    cmd: rm -rf dist/
