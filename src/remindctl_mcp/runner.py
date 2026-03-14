@@ -2,6 +2,8 @@ import json
 import shutil
 import subprocess
 
+_TIMEOUT_SECONDS = 10
+
 
 class RemindctlError(Exception):
     """Raised when remindctl cannot be found or returns an error."""
@@ -29,11 +31,14 @@ def run_remindctl(args: list[str]) -> dict | list:
     cmd = [binary] + args + ["--json"]
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=_TIMEOUT_SECONDS)
     except subprocess.TimeoutExpired:
-        raise RemindctlError("remindctl timed out after 10 seconds")
+        raise RemindctlError(f"remindctl timed out after {_TIMEOUT_SECONDS} seconds")
 
     if result.returncode != 0:
         raise RemindctlError(result.stderr.strip())
 
-    return json.loads(result.stdout)
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as e:
+        raise RemindctlError(f"remindctl returned invalid JSON: {e}")
