@@ -1,0 +1,81 @@
+# remindctl-mcp
+
+MCP server for Apple Reminders via [remindctl](https://github.com/steipete/remindctl). Expose Apple Reminders management to Claude and ChatGPT via the Model Context Protocol.
+
+## Prerequisites
+
+- macOS 14+
+- [remindctl](https://github.com/steipete/remindctl) installed
+- [uv](https://docs.astral.sh/uv/) installed (for uvx)
+- Grant Reminders permission: run `remindctl authorize` once in terminal
+
+## Available Tools
+
+- `get_reminders(filter)` — query by today/tomorrow/week/overdue/upcoming/completed/all/YYYY-MM-DD
+- `get_lists()` — list all reminder lists
+- `get_list(name)` — reminders in a specific list
+- `add_reminder(title, list?, due?)` — create a reminder
+- `edit_reminder(id, title?, due?)` — update a reminder
+- `complete_reminder(ids)` — mark complete
+- `delete_reminder(id)` — delete a reminder
+- `check_status()` — verify permission status
+
+## Installation
+
+### Claude Code
+
+Add to `.mcp.json` in project root or `~/.claude.json` (user-level):
+
+```json
+{
+  "mcpServers": {
+    "remindctl": {
+      "command": "uvx",
+      "args": ["remindctl-mcp"]
+    }
+  }
+}
+```
+
+### Claude Desktop (including Cowork)
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "remindctl": {
+      "command": "uvx",
+      "args": ["remindctl-mcp"]
+    }
+  }
+}
+```
+
+### ChatGPT Desktop
+
+ChatGPT Desktop supports MCP servers. Add to ChatGPT's MCP config (Settings → Advanced → MCP Servers):
+
+```json
+{
+  "remindctl": {
+    "command": "uvx",
+    "args": ["remindctl-mcp"]
+  }
+}
+```
+
+## Updating
+
+```bash
+uvx --no-cache remindctl-mcp
+```
+
+## Development
+
+```bash
+git clone https://github.com/sam-phinizy/remindctl-mcp
+cd remindctl-mcp
+uv sync
+uv run pytest
+```
