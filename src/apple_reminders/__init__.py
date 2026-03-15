@@ -1,3 +1,4 @@
+from apple_reminders.client import AsyncRemindersClient, RemindersClient
 from apple_reminders.exceptions import (
     RemindersAuthError,
     RemindersError,
@@ -7,6 +8,8 @@ from apple_reminders.exceptions import (
 from apple_reminders.models import AuthStatus, Priority, Reminder, ReminderFilter, ReminderList
 
 __all__ = [
+    "AsyncRemindersClient",
+    "RemindersClient",
     "RemindersError",
     "RemindersNotFoundError",
     "RemindersTimeoutError",
