@@ -1,6 +1,6 @@
 {
   "remindctl": {
     "command": "uvx",
-    "args": ["--refresh", "remindctl-mcp"]
+    "args": ["--refresh", "apple-reminders-py[mcp]"]
   }
 }
