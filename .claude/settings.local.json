@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:claude.com)",
+      "Bash(git init:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv run:*)",
+      "Bash(uv add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo:*)",
+      "Bash(git remote:*)",
+      "Bash(git -C /Users/sphinizy/src/github.com/sam-phinizy/claude-reminders-kit log --oneline 2>/dev/null || echo \"Not a git repo or no commits\")",
+      "Bash(python -m pytest tests/ --tb=short -q 2>&1 | head -50)",
+      "Bash(python -m pytest tests/test_tools.py -v 2>&1)",
+      "Bash(git push:*)",
+      "Bash(task:*)",
+      "Bash(python3:*)",
+      "Bash(remindctl edit:*)",
+      "Skill(plugin-dev:create-plugin)",
+      "Read(//private/tmp/sams-claude-menagerie/.claude-plugin/**)",
+      "Read(//private/tmp/sams-claude-menagerie/**)",
+      "Bash(which remindctl:*)",
+      "Bash(for cmd:*)",
+      "Bash(remindctl show:*)",
+      "Bash(remindctl list:*)",
+      "Bash(remindctl status:*)"
+    ]
+  }
+}

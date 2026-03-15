@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "remindctl": {
+      "command": "uvx",
+      "args": [
+        "remindctl-mcp"
+      ]
+    }
+  }
+}

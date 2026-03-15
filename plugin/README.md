@@ -11,8 +11,22 @@ Apple Reminders integration for Claude Code. Provides MCP tools for managing rem
 
 ## Installation
 
+### From marketplace (recommended)
+
 ```bash
-claude --plugin-dir /path/to/claude-reminders-kit/plugin
+claude plugin add sam-phinizy/sams-claude-menagerie
+```
+
+This installs all plugins from the menagerie. To install only remindctl:
+
+```bash
+claude plugin add sam-phinizy/remindctl-mcp --path plugin
+```
+
+### Local development
+
+```bash
+claude --plugin-dir /path/to/remindctl-mcp/plugin
 ```
 
 The plugin automatically configures the `remindctl-mcp` MCP server — no manual MCP setup needed.

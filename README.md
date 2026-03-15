@@ -86,7 +86,13 @@ uvx --no-cache remindctl-mcp
 For Claude Code users, there's also a plugin with the **text-to-reminders** skill — it parses emails, Slack threads, and meeting notes into structured reminders automatically.
 
 ```bash
-claude --plugin-dir /path/to/remindctl-mcp/plugin
+claude plugin add sam-phinizy/remindctl-mcp --path plugin
+```
+
+Or install via the [sams-claude-menagerie](https://github.com/sam-phinizy/sams-claude-menagerie) marketplace:
+
+```bash
+claude plugin add sam-phinizy/sams-claude-menagerie
 ```
 
 See [`plugin/README.md`](plugin/README.md) for details.
